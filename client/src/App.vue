@@ -5,19 +5,16 @@
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
   },
   methods: {
-    callBE: async function() {
-      console.log('hello')
+    async callBE() {
       let response = await fetch('http://localhost:3000/');
       response = await response.text();
-      console.log(response)
+      console.log('from server: ' + response)
     }
   }
 }
