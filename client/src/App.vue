@@ -15,7 +15,7 @@ export default {
   methods: {
     callBE: async function() {
       console.log('hello')
-      let response = await fetch('/');
+      let response = await fetch('http://localhost:3000/');
       response = await response.text();
       console.log(response)
     }

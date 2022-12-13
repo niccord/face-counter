@@ -1,6 +1,6 @@
 FROM node:lts-alpine
-WORKDIR /usr/app
-COPY package.json .
+WORKDIR /usr/src/app/api
+COPY package*.json .
 RUN npm install --quiet
 EXPOSE 3000
 
