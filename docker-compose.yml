@@ -1,0 +1,25 @@
+version: '3'
+services:
+  web:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    volumes:
+      - ./api:/usr/src/app/api
+      - /usr/src/app/api/node_modules
+    ports:
+      - "3000:3000"
+    container_name: node-api
+    environment:
+      DATABASE_URL: postgres://todoapp@postgres/todos
+  
+  vue-ui:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    container_name: vue-ui
+    volumes:
+      - ./client:/usr/src/app/client
+      - /usr/src/app/client/node_modules
