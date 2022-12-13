@@ -1,21 +1,19 @@
 <template>
   <div id="app">
-    <button @click="callBE">Hello</button>
+    <!-- if user is logged in: show request form -->
+    <!-- else show login -->
+    <LoginForm />
   </div>
 </template>
 
 <script>
-
+import LoginForm from './components/LoginForm.vue'
 export default {
   name: 'App',
   components: {
+    LoginForm
   },
   methods: {
-    async callBE() {
-      let response = await fetch('http://localhost:3000/');
-      response = await response.text();
-      console.log('from server: ' + response)
-    }
   }
 }
 </script>
