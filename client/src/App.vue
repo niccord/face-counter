@@ -1,19 +1,33 @@
 <template>
   <div id="app">
     <!-- if user is logged in: show request form -->
+    <RequestsList v-if="userLoggedIn" :username="username"></RequestsList>
     <!-- else show login -->
-    <LoginForm />
+    <LoginForm v-else v-model="username" />
   </div>
 </template>
 
 <script>
 import LoginForm from './components/LoginForm.vue'
+import RequestsList from './components/RequestsList.vue'
 export default {
   name: 'App',
+  data() {
+    return {
+      userLoggedIn: false,
+      username: ''
+    }
+  },
   components: {
-    LoginForm
+    LoginForm,
+    RequestsList
   },
   methods: {
+  },
+  watch: {
+    username() {
+      this.userLoggedIn = true;
+    }
   }
 }
 </script>
@@ -23,8 +37,5 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
