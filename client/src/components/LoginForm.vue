@@ -53,6 +53,7 @@ export default {
       }
       const response = await post.json();
       console.log('from server: ' + JSON.stringify(response))
+      localStorage.faceCounterUsername = this.username;
     }
   },
 }

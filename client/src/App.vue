@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <!-- if user is logged in: show request form -->
-    <RequestsList v-if="userLoggedIn" :username="username"></RequestsList>
+    <RequestsList v-if="userLoggedIn" v-model="username"></RequestsList>
     <!-- else show login -->
     <LoginForm v-else v-model="username" />
   </div>
@@ -25,9 +25,14 @@ export default {
   methods: {
   },
   watch: {
-    username() {
-      this.userLoggedIn = true;
+    username(oldval, newval) {
+      this.userLoggedIn = !newval;
     }
+  },
+  created() {
+    // read cookies
+    this.userLoggedIn = !!localStorage.faceCounterUsername;
+    this.username = localStorage.faceCounterUsername || '';
   }
 }
 </script>
