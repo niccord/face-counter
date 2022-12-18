@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "old_dev": "node index.js",
+    "docker-dev": "node index.js",
     "dev": "nodemon index.js localhost 3000"
   },
   "repository": {
