@@ -1,11 +1,11 @@
 <template>
   <div>
     <h1>Add image</h1>
-    <input type="file" id="file" accept="image/jpeg, image/png, image/jpg" @change="previewFile">
+    <input type="file" id="file" accept="image/jpeg, image/jpg" @change="previewFile">
+    <img id="imgPreview" :src="imgSrc">
     <p class="error" v-if="missingImage">
       Please, insert an image
     </p>
-    <img id="imgPreview" :src="imgSrc">
     <input type="text" name="name" id="name" placeholder="insert an identifier" v-model="name">
     <p class="error" v-if="missingName">
       Please, insert an identifier
@@ -50,7 +50,7 @@ export default {
       const formData = new FormData();
       formData.append('file', this.file, this.file.name);
       formData.append('name', this.name);
-      const data = await fetch(url, {
+      await fetch(url, {
         method: 'POST',
         headers: {
           Authorization: 'Bearer ' + localStorage.faceCounterToken,
@@ -58,12 +58,10 @@ export default {
         body: formData,
         redirect: 'follow'
       });
-      console.log(data);
       this.$emit('new-request-added')
       this.reset();
     },
     reset() {
-      this.imgSrc = '';
       this.file = '';
       this.name = '';
       this.missingName = false;
@@ -81,7 +79,7 @@ export default {
 
 <style>
 #imgPreview {
-  max-width: 300px;
-  max-height: 300px;
+  max-width: 500px;
+  max-height: 500px;
 }
 </style>
