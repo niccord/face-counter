@@ -1,9 +1,10 @@
 <template>
   <div id="app">
+    <h1>Face counter app</h1>
     <!-- if user is logged in: show request form -->
-    <RequestsList v-if="userLoggedIn" v-model="username"></RequestsList>
+    <RequestsList v-if="userLoggedIn" :username="username" @logout="userLoggedOut"></RequestsList>
     <!-- else show login -->
-    <LoginForm v-else v-model="username" />
+    <LoginForm v-else @login="checkUserLogin" />
   </div>
 </template>
 
@@ -23,16 +24,18 @@ export default {
     RequestsList
   },
   methods: {
-  },
-  watch: {
-    username(oldval, newval) {
-      this.userLoggedIn = !newval;
+    checkUserLogin() {
+      this.userLoggedIn = !!localStorage.faceCounterToken;
+      this.username = localStorage.faceCounterUsername || '';
+    },
+    userLoggedOut() {
+      delete localStorage.faceCounterUsername;
+      delete localStorage.faceCounterToken;
+      this.userLoggedIn = false;
     }
   },
   created() {
-    // read cookies
-    this.userLoggedIn = !!localStorage.faceCounterUsername;
-    this.username = localStorage.faceCounterUsername || '';
+    this.checkUserLogin();
   }
 }
 </script>
@@ -42,5 +45,11 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+.error {
+  color: red;
+}
+h1 {
+  text-align: center;
 }
 </style>

@@ -1,9 +1,9 @@
 <template>
   <div id="login">
-    <h1>Login</h1>
+    <h2>Login</h2>
     <label for="username">Username</label>
     <input type="text" name="username" id="username" placeholder="Insert username" v-model="username">
-    <input type="button" value="Login" @click="login()">
+    <input type="button" value="Login" @click="login">
     <div v-if="isMissingUsername">
       <p class="error">Please, insert a username</p>
     </div>
@@ -20,12 +20,6 @@ export default {
       username: '',
       isMissingUsername: false,
       loginError: false,
-    }
-  },
-  props: {
-    value: {
-      type: String,
-      default: ''
     }
   },
   methods: {
@@ -47,13 +41,13 @@ export default {
       })
       if (post.status >= 200 && post.status < 400) {
         // save session JWT
-        this.$emit('input', this.username);
+        const response = await post.json();
+        localStorage.faceCounterUsername = this.username;
+        localStorage.faceCounterToken = response.token;
+        this.$emit('login');
       } else {
         this.loginError = true;
       }
-      const response = await post.json();
-      console.log('from server: ' + JSON.stringify(response))
-      localStorage.faceCounterUsername = this.username;
     }
   },
 }
@@ -63,8 +57,5 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
-}
-.error {
-  color: red;
 }
 </style>
