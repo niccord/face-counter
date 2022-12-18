@@ -1,16 +1,35 @@
 <template>
   <div>
-    <h1>Add image</h1>
-    <input type="file" id="file" accept="image/jpeg, image/jpg" @change="previewFile">
-    <img id="imgPreview" :src="imgSrc">
-    <p class="error" v-if="missingImage">
-      Please, insert an image
-    </p>
-    <input type="text" name="name" id="name" placeholder="insert an identifier" v-model="name">
-    <p class="error" v-if="missingName">
-      Please, insert an identifier
-    </p>
-    <input type="button" value="Add image" @click="addImage">
+    <h3 class="has-text-centered subtitle">Add image</h3>
+    <div class="columns">
+      <div class="column is-6">
+        <img id="imgPreview" :src="imgSrc">
+      </div>
+      <div class="column is-6">
+        <div class="file">
+          <label class="file-label">
+            <input class="file-input" type="file" id="file" accept="image/jpeg, image/jpg" @change="previewFile">
+            <span class="file-cta">
+              <span class="file-icon">
+                <i class="fas fa-upload"></i>
+              </span>
+              <span class="file-label">
+                Choose a file…
+              </span>
+            </span>
+          </label>
+        </div>
+        <p class="error" v-if="missingImage">
+          Please, insert an image
+        </p>
+        <input type="text" name="name" id="name" placeholder="insert an identifier" v-model="name">
+        <p class="error" v-if="missingName">
+          Please, insert an identifier
+        </p>
+        <input type="button" value="Add image" @click="addImage">
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -18,7 +37,7 @@
 export default {
   data() {
     return {
-      imgSrc: '',
+      imgSrc: 'https://appsrv1-147a1.kxcdn.com/bulma-css-starter/media/contact.svg',
       file: '',
       fileReader: new FileReader(),
       name: '',
@@ -78,8 +97,4 @@ export default {
 </script>
 
 <style>
-#imgPreview {
-  max-width: 500px;
-  max-height: 500px;
-}
 </style>

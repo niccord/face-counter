@@ -1,10 +1,20 @@
 <template>
   <div id="app">
-    <h1>Face counter app</h1>
+    <h1 class="title is-1 has-text-centered">
+      Face counter app
+    </h1>
     <!-- if user is logged in: show request form -->
     <RequestsList v-if="userLoggedIn" :username="username" @logout="userLoggedOut"></RequestsList>
     <!-- else show login -->
     <LoginForm v-else @login="checkUserLogin" />
+
+    <footer class="footer">
+      <div class="content has-text-centered">
+        <p>
+          <strong>Face Counter</strong> by <a href="https://github.com/niccord">Nicola Cordioli</a>. 
+        </p>
+      </div>
+    </footer>
   </div>
 </template>
 
@@ -49,7 +59,7 @@ export default {
 .error {
   color: red;
 }
-h1 {
-  text-align: center;
+#app > h1.title {
+  padding-top: 30px;
 }
 </style>

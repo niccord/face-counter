@@ -1,28 +1,40 @@
 <template>
   <div>
-    <h2>Hi {{username}}</h2>
     <div class="container">
-      <div class="header">
-        <input type="button" value="Logout" id="logout" @click="logout">
-      </div>
-      <div class="new-request">
-        <NewRequest @new-request-added="loadRequests" />
-      </div>
-      <div class="requests-list">
-        <table>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Status</th>
-            <th># Face detected</th>
-          </tr>
-          <tr v-for="request in requestsList" :key="request.id">
-            <td>{{request.id}}</td>
-            <td>{{request.name}}</td>
-            <td>{{request.status}}</td>
-            <td>{{request.faceDetected}}</td>
-          </tr>
-        </table>
+      <section class="section">
+        <div class="container">
+          <h1 class="title has-text-centered">
+            Hi {{username}}
+          </h1>
+          <p class="has-text-centered subtitle">
+            Add a new image to process and review your list
+          </p>
+        </div>
+      </section>
+      <div class="columns">
+        <div class="column">
+          <NewRequest @new-request-added="loadRequests" />
+        </div>
+        <div class="column">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Status</th>
+                <th># Face detected</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="request in requestsList" :key="request.id">
+                <td>{{request.id}}</td>
+                <td>{{request.name}}</td>
+                <td>{{request.status}}</td>
+                <td>{{request.faceDetected}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
@@ -52,31 +64,31 @@ export default {
     },
     async loadRequests() {
       const url = process.env.VUE_APP_BACKEND_ENDPOINT + '/requests';
-      const data = await fetch(url, {
-        headers: {
-          Authorization: 'Bearer ' + localStorage.faceCounterToken
+      try {
+        const data = await fetch(url, {
+          headers: {
+            Authorization: 'Bearer ' + localStorage.faceCounterToken
+          }
+        })
+        if (data.status === 401) {
+          this.logout();
+          return;
         }
-      });
-      this.requestsList = await data.json();
+        if (data.status === 200) {
+          this.requestsList = await data.json();
+        }
+      } 
+      catch (ex){
+        this.logout();
       }
+    }
   },
   created() {
     this.loadRequests();
-    this.refreshInterval = setInterval(this.loadRequests, 5_000)
+    this.refreshInterval = setInterval(this.loadRequests, 3_000)
   }
 }
 </script>
 
 <style>
-.new-request {
-  border: 5px solid;
-  width: 300px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  text-align: center;
-}
-table {
-  text-align: center;
-}
 </style>
