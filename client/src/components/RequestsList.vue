@@ -34,7 +34,8 @@ export default {
   components: {NewRequest},
   data() {
     return {
-      requestsList: []
+      requestsList: [],
+      refreshInterval: null
     }
   },
   props: {
@@ -44,6 +45,9 @@ export default {
   },
   methods: {
     logout() {
+      if (this.refreshInterval) {
+        clearInterval(this.refreshInterval);
+      }
       this.$emit('logout', '');
     },
     async loadRequests() {
@@ -58,7 +62,7 @@ export default {
   },
   created() {
     this.loadRequests();
-    setInterval(this.loadRequests, 5_000)
+    this.refreshInterval = setInterval(this.loadRequests, 5_000)
   }
 }
 </script>
