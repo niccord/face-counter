@@ -3,6 +3,7 @@ const cors = require("cors");
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const fileUpload = require("express-fileupload");
+require('dotenv').config()
 const port = 3000
 
 const { authenticateToken, formatdate, adminList } = require('./utilities'); 
@@ -15,7 +16,7 @@ app.use(bodyParser.json());
 app.use(fileUpload());
 
 const corsOptions = {
-  origin: "http://localhost:8080"
+  origin: process.env.FRONTEND_URL
 };
 
 app.use(cors(corsOptions));
@@ -72,7 +73,7 @@ app.get('/admin-request-list', authenticateToken, (req, res) => {
   return res.json(list);
 });
 
-app.post('/newRequest', authenticateToken, async (req, res) => {
+app.post('/new-request', authenticateToken, async (req, res) => {
   const { name } = req.body;
   const { file } = req.files;
   if (!file || !name) return res.sendStatus(400);

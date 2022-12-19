@@ -65,7 +65,7 @@ export default {
       }
       if (this.missingName || this.missingImage) return;
 
-      const url = process.env.VUE_APP_BACKEND_ENDPOINT + '/newRequest';
+      const url = process.env.VUE_APP_BACKEND_ENDPOINT + '/new-request';
       const formData = new FormData();
       formData.append('file', this.file, this.file.name);
       formData.append('name', this.name);

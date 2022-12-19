@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const adminList = ['niccord'];
+const adminList = process.env.ADMIN_LIST.split(',');
 
 function authenticateToken(req, res, next) {
   const authHeader = req.headers['authorization']
