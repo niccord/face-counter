@@ -6,8 +6,9 @@
     
 <section class="hero is-primary">
   <div class="hero-body">
+    <AdminRequestsList v-if="userIsAdmin" :username="username" @logout="userLoggedOut"></AdminRequestsList>
     <!-- if user is logged in: show request form -->
-    <RequestsList v-if="userLoggedIn" :username="username" @logout="userLoggedOut"></RequestsList>
+    <RequestsList v-else-if="userLoggedIn" :username="username" @logout="userLoggedOut"></RequestsList>
     <!-- else show login -->
     <LoginForm v-else @login="checkUserLogin" />
   </div>
@@ -23,6 +24,7 @@
 </template>
 
 <script>
+import AdminRequestsList from './components/AdminRequestsList.vue'
 import LoginForm from './components/LoginForm.vue'
 import RequestsList from './components/RequestsList.vue'
 export default {
@@ -30,21 +32,26 @@ export default {
   data() {
     return {
       userLoggedIn: false,
-      username: ''
+      username: '',
+      userIsAdmin: false,
     }
   },
   components: {
+    AdminRequestsList,
     LoginForm,
-    RequestsList
+    RequestsList,
   },
   methods: {
     checkUserLogin() {
       this.userLoggedIn = !!localStorage.faceCounterToken;
       this.username = localStorage.faceCounterUsername || '';
+      this.userIsAdmin = localStorage.faceCounterIsAdmin === 'true';
     },
     userLoggedOut() {
       delete localStorage.faceCounterUsername;
       delete localStorage.faceCounterToken;
+      delete localStorage.faceCounterIsAdmin;
+      this.userIsAdmin = false;
       this.userLoggedIn = false;
     }
   },

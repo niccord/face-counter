@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const fileUpload = require("express-fileupload");
 const port = 3000
 
-const { authenticateToken, formatdate } = require('./utilities'); 
+const { authenticateToken, formatdate, adminList } = require('./utilities'); 
 const faceapiService = require('./faceapiService');
 
 const app = express()
@@ -22,7 +22,6 @@ app.use(cors(corsOptions));
 app.use(express.static('out'));
 
 const sessions = {};
-const adminList = ['niccord'];
 let requestNextId = 1;
 const requestList = [];
 
@@ -39,20 +38,37 @@ app.post('/login', (req, res) => {
   // check if user already have a session
   if (sessions[username]) return res.json(sessions[username]);
 
-  // is the user an admin?
-  if (adminList.includes(username)) {
-
-  }
-
   // create a session an give the user a key
   jwt.sign({username}, 'thisismyveryspecialsecretkey', { expiresIn: '30m' }, (err,token)=>{
-    res.json({ token });
+    res.json({ token, isAdmin: adminList.includes(username) });
   });
 });
 
 app.get('/requests', authenticateToken, (req, res) => {
   const username = req.user.username;
   const list = requestList.filter(request => request.username === username);
+  return res.json(list);
+});
+
+app.get('/admin-request-list', authenticateToken, (req, res) => {
+  if (!req.user.isAdmin) return res.sendStatus(401);
+
+  const list = requestList.reduce((acc, el) => {
+    const row = acc.find(e => e.username === el.username)
+    if (row) {
+      row.requestNumber += 1;
+      row.faceDetected += el.faceDetected;
+    } else {
+      const newrow = {
+        username: el.username,
+        requestNumber: 1,
+        faceDetected: el.faceDetected
+      }
+      acc.push(newrow)
+    }
+    return acc;
+  }, [])
+  list.sort();
   return res.json(list);
 });
 

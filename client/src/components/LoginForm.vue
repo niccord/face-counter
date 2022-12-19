@@ -61,6 +61,7 @@ export default {
         const response = await post.json();
         localStorage.faceCounterUsername = this.username;
         localStorage.faceCounterToken = response.token;
+        localStorage.faceCounterIsAdmin = response.isAdmin;
         this.$emit('login');
       } else {
         this.loginError = true;

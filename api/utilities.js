@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const adminList = ['niccord'];
 
 function authenticateToken(req, res, next) {
   const authHeader = req.headers['authorization']
@@ -8,6 +9,7 @@ function authenticateToken(req, res, next) {
   jwt.verify(token, 'thisismyveryspecialsecretkey', (err, user) => {
     if (err) return res.sendStatus(401)
     req.user = user
+    req.user.isAdmin = adminList.includes(user.username)
     next()
   })
 }
@@ -30,4 +32,5 @@ function formatdate(date) {
 module.exports = {
   authenticateToken,
   formatdate,
+  adminList,
 };
