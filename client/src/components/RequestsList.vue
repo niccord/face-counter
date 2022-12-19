@@ -23,6 +23,10 @@
                 <th>Name</th>
                 <th>Status</th>
                 <th># Face detected</th>
+                <th>Detection result</th>
+                <th>
+                  <button class="button" @click="loadRequests">Refresh</button>
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -31,6 +35,12 @@
                 <td>{{request.name}}</td>
                 <td>{{request.status}}</td>
                 <td>{{request.faceDetected}}</td>
+                <td>
+                  <a :href="request.thumbnail" target="_blank" rel="noopener noreferrer">
+                    <img :src="request.thumbnail">
+                  </a>
+                </td>
+                <td></td>
               </tr>
             </tbody>
           </table>
@@ -92,10 +102,12 @@ export default {
   },
   created() {
     this.loadRequests();
-    this.refreshInterval = setInterval(this.loadRequests, 3_000)
+    const interval = parseInt(process.env.VUE_APP_REFRESH_INTERVAL);
+    this.refreshInterval = setInterval(this.loadRequests, interval)
   }
 }
 </script>
 
 <style>
+
 </style>
