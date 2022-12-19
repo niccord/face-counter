@@ -36,6 +36,13 @@
           </table>
         </div>
       </div>
+      <section class="section">
+        <div class="container">
+          <p class="has-text-centered subtitle">
+            <button class="button" @click="logout">Logout</button>
+          </p>
+        </div>
+      </section>
     </div>
   </div>
 </template>

@@ -22,11 +22,11 @@
         <p class="error" v-if="missingImage">
           Please, insert an image
         </p>
-        <input type="text" name="name" id="name" placeholder="insert an identifier" v-model="name">
+        <input type="text" name="name" id="name" class="input" placeholder="insert an identifier" v-model="name" required>
         <p class="error" v-if="missingName">
           Please, insert an identifier
         </p>
-        <input type="button" value="Add image" @click="addImage">
+        <input type="button" class="button" value="Add image" @click="addImage">
       </div>
     </div>
 

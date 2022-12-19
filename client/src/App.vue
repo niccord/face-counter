@@ -3,11 +3,15 @@
     <h1 class="title is-1 has-text-centered">
       Face counter app
     </h1>
+    
+<section class="hero is-primary">
+  <div class="hero-body">
     <!-- if user is logged in: show request form -->
     <RequestsList v-if="userLoggedIn" :username="username" @logout="userLoggedOut"></RequestsList>
     <!-- else show login -->
     <LoginForm v-else @login="checkUserLogin" />
-
+  </div>
+</section>
     <footer class="footer">
       <div class="content has-text-centered">
         <p>

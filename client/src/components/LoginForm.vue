@@ -1,15 +1,32 @@
 <template>
   <div id="login">
-    <h2>Login</h2>
-    <label for="username">Username</label>
-    <input type="text" name="username" id="username" placeholder="Insert username" v-model="username">
-    <input type="button" value="Login" @click="login">
-    <div v-if="isMissingUsername">
-      <p class="error">Please, insert a username</p>
+
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column is-5-tablet is-4-desktop is-3-widescreen">
+          <form action="" class="box">
+            <div class="field">
+              <label for="" class="label">Username</label>
+              <div class="control has-icons-left">
+                <input type="text" name="username" id="username" placeholder="Insert username" class="input" v-model="username" required>
+                <span class="icon is-small is-left">
+                  <i class="fa fa-envelope"></i>
+                </span>
+              </div>
+            </div>
+            <div class="field">
+              <button class="button is-success" @click.prevent="login">
+                Login
+              </button>
+            </div>
+          </form>
+          <div v-if="loginError">
+            <p class="error">An error happened during login, please try again</p>
+          </div>
+        </div>
+      </div>
     </div>
-    <div v-if="loginError">
-      <p class="error">An error happened during login, please try again</p>
-    </div>
+
 </div>
 </template>
 
