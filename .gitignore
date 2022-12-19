@@ -102,3 +102,6 @@ dist
 
 # TernJS port file
 .tern-port
+
+# face-api faces recognized
+api/out/

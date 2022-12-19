@@ -3,7 +3,14 @@ const path = require("path");
 const tf = require("@tensorflow/tfjs-node");
 
 const faceapi = require("@vladmandic/face-api/dist/face-api.node.js");
+
+const canvas = require("canvas");
+const { Canvas, Image, ImageData } = canvas;
+
+faceapi.env.monkeyPatch({ Canvas, Image, ImageData });
+
 const modelPathRoot = "./models";
+const save = require('./saveFile');
 
 let optionsSSDMobileNet;
 
@@ -21,7 +28,7 @@ async function detect(tensor) {
   return result;
 }
 
-async function main(file) {
+async function main(file, filename) {
   console.log("FaceAPI single-process test");
 
   await faceapi.tf.setBackend("tensorflow");
@@ -45,6 +52,12 @@ async function main(file) {
   const tensor = await image(file);
   const result = await detect(tensor);
   console.log("Detected faces:", result.length);
+
+  const canvasImg = await canvas.loadImage(file);
+  const out = await faceapi.createCanvasFromMedia(canvasImg);
+  faceapi.draw.drawDetections(out, result);
+  save.saveFile(filename, out.toBuffer("image/jpeg"));
+  console.log(`Saved results to ${filename}`);
 
   tensor.dispose();
 

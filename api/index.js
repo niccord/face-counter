@@ -5,7 +5,8 @@ const jwt = require('jsonwebtoken');
 const fileUpload = require("express-fileupload");
 const port = 3000
 
-const faceapiService = require('./faceapiService.js');
+const { authenticateToken, formatdate } = require('./utilities'); 
+const faceapiService = require('./faceapiService');
 
 const app = express()
 
@@ -18,6 +19,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+app.use(express.static('out'));
 
 const sessions = {};
 const adminList = ['niccord'];
@@ -48,18 +50,6 @@ app.post('/login', (req, res) => {
   });
 });
 
-function authenticateToken(req, res, next) {
-  const authHeader = req.headers['authorization']
-  const token = authHeader && authHeader.split(' ')[1]
-  if (token == null) return res.sendStatus(401)
-
-  jwt.verify(token, 'thisismyveryspecialsecretkey', (err, user) => {
-    if (err) return res.sendStatus(401)
-    req.user = user
-    next()
-  })
-}
-
 app.get('/requests', authenticateToken, (req, res) => {
   const username = req.user.username;
   const list = requestList.filter(request => request.username === username);
@@ -80,16 +70,18 @@ app.post('/newRequest', authenticateToken, async (req, res) => {
   requestList.push(request);
   requestNextId += 1;
 
+  const filename = formatdate(new Date()) + '-' + file.name;
   sleep(5_000).then(() => {
     request.status = 'progress';
 
-    // face api process bytecode
-    return faceapiService.detect(file.data);
+    // face api process file
+    return faceapiService.detect(file.data, filename);
   }).then((detections) => {
     request.status = 'ready';
 
     // save it to the array
     request.faceDetected = detections.length;
+    request.thumbnail =  `http://localhost:3000/${filename}`;
   }).catch((err) => {
     console.error(`error counting faces on image ${request.id}`, err);
     request.status = 'error'
