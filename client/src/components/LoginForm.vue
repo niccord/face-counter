@@ -59,10 +59,11 @@ export default {
       if (post.status >= 200 && post.status < 400) {
         // save session JWT
         const response = await post.json();
-        localStorage.faceCounterUsername = this.username;
-        localStorage.faceCounterToken = response.token;
-        localStorage.faceCounterIsAdmin = response.isAdmin;
-        this.$emit('login');
+        this.$emit('login', {
+          username: this.username,
+          token: response.token,
+          isAdmin: response.isAdmin,
+        });
       } else {
         this.loginError = true;
       }

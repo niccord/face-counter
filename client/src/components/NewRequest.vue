@@ -37,13 +37,19 @@
 export default {
   data() {
     return {
-      imgSrc: 'https://appsrv1-147a1.kxcdn.com/bulma-css-starter/media/contact.svg',
+      imgSrc: process.env.VUE_APP_IMG_PLACEHOLDER || 'https://appsrv1-147a1.kxcdn.com/bulma-css-starter/media/contact.svg',
       file: '',
       fileReader: new FileReader(),
       name: '',
       missingName: false,
       missingImage: false,
     }
+  },
+  props: {
+    token: {
+      type: String,
+      required: true,
+    },
   },
   methods: {
     previewFile(e) {
@@ -72,7 +78,7 @@ export default {
       await fetch(url, {
         method: 'POST',
         headers: {
-          Authorization: 'Bearer ' + localStorage.faceCounterToken,
+          Authorization: 'Bearer ' + this.token,
         },
         body: formData,
         redirect: 'follow'

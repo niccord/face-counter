@@ -6,9 +6,9 @@
     
 <section class="hero is-primary">
   <div class="hero-body">
-    <AdminRequestsList v-if="userIsAdmin" :username="username" @logout="userLoggedOut"></AdminRequestsList>
+    <AdminRequestsList v-if="userIsAdmin" :username="username" :token="token" @logout="userLoggedOut"></AdminRequestsList>
     <!-- if user is logged in: show request form -->
-    <RequestsList v-else-if="userLoggedIn" :username="username" @logout="userLoggedOut"></RequestsList>
+    <RequestsList v-else-if="userLoggedIn" :username="username" :token="token" @logout="userLoggedOut"></RequestsList>
     <!-- else show login -->
     <LoginForm v-else @login="checkUserLogin" />
   </div>
@@ -32,6 +32,7 @@ export default {
   data() {
     return {
       userLoggedIn: false,
+      token: '',
       username: '',
       userIsAdmin: false,
     }
@@ -42,17 +43,17 @@ export default {
     RequestsList,
   },
   methods: {
-    checkUserLogin() {
-      this.userLoggedIn = !!localStorage.faceCounterToken;
-      this.username = localStorage.faceCounterUsername || '';
-      this.userIsAdmin = localStorage.faceCounterIsAdmin === 'true';
+    checkUserLogin(loginData) {
+      this.userLoggedIn = !!loginData.token;
+      this.token = loginData.token;
+      this.username = loginData.username;
+      this.userIsAdmin = loginData.isAdmin;
     },
     userLoggedOut() {
-      delete localStorage.faceCounterUsername;
-      delete localStorage.faceCounterToken;
-      delete localStorage.faceCounterIsAdmin;
-      this.userIsAdmin = false;
       this.userLoggedIn = false;
+      this.token = '';
+      this.username = '';
+      this.userIsAdmin = false;
     }
   },
   created() {

@@ -55,8 +55,13 @@ export default {
   },
   props: {
     username: {
-      type: String
-    }
+      type: String,
+      required: true,
+    },
+    token: {
+      type: String,
+      required: true,
+    },
   },
   methods: {
     async loadRequests() {
@@ -64,7 +69,7 @@ export default {
       try {
         const data = await fetch(url, {
           headers: {
-            Authorization: 'Bearer ' + localStorage.faceCounterToken
+            Authorization: 'Bearer ' + this.token
           }
         })
         if (data.status === 401) {

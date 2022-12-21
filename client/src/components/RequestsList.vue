@@ -13,7 +13,7 @@
       </section>
       <div class="columns">
         <div class="column">
-          <NewRequest @new-request-added="loadRequests" />
+          <NewRequest @new-request-added="loadRequests" :token="token" />
         </div>
         <div class="column">
           <table class="table">
@@ -60,7 +60,7 @@
 <script>
 import NewRequest from './NewRequest.vue';
 export default {
-  components: {NewRequest},
+  components: { NewRequest },
   data() {
     return {
       requestsList: [],
@@ -69,8 +69,13 @@ export default {
   },
   props: {
     username: {
-      type: String
-    }
+      type: String,
+      required: true,
+    },
+    token: {
+      type: String,
+      required: true,
+    },
   },
   methods: {
     logout() {
@@ -84,7 +89,7 @@ export default {
       try {
         const data = await fetch(url, {
           headers: {
-            Authorization: 'Bearer ' + localStorage.faceCounterToken
+            Authorization: 'Bearer ' + this.token
           }
         })
         if (data.status === 401) {
