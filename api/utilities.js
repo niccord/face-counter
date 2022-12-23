@@ -2,16 +2,20 @@ const jwt = require('jsonwebtoken');
 const adminList = process.env.ADMIN_LIST.split(',');
 
 function authenticateToken(req, res, next) {
-  const authHeader = req.headers['authorization']
-  const token = authHeader && authHeader.split(' ')[1]
-  if (token == null) return res.sendStatus(401)
-
-  jwt.verify(token, 'thisismyveryspecialsecretkey', (err, user) => {
-    if (err) return res.sendStatus(401)
+  if (!req.headers || !req.headers['authorization']) {
+    return res.sendStatus(400)
+  } 
+  
+  try {
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1]
+    const user = jwt.verify(token, process.env.JWT_TOKEN_SECRET);
     req.user = user
     req.user.isAdmin = adminList.includes(user.username)
     next()
-  })
+  } catch (err) {
+    return res.sendStatus(401)
+  }
 }
 
 function formatdate(date) {
