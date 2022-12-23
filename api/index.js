@@ -40,7 +40,7 @@ app.post('/login', (req, res) => {
   if (sessions[username]) return res.json(sessions[username]);
 
   // create a session an give the user a key
-  jwt.sign({username}, 'thisismyveryspecialsecretkey', { expiresIn: '30m' }, (err,token)=>{
+  jwt.sign({username}, process.env.JWT_TOKEN_SECRET, { expiresIn: '30m' }, (err,token)=>{
     res.json({ token, isAdmin: adminList.includes(username) });
   });
 });

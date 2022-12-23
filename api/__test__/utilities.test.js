@@ -33,4 +33,26 @@ describe('authenticate token', () => {
         expect(errStatusCode).toBe(400);
     });
 
+    test('with wrong token', async () => {
+        mockRequest = {
+            headers: {
+                'authorization': 'Bearer abc'
+            }
+        }
+        const errStatusCode = authenticateToken(mockRequest, mockResponse, nextFunction);
+        expect(errStatusCode).toBe(401);
+    });
+
+    test('with right token', async () => {
+        const jwt = require('jsonwebtoken');
+        const username = 'username'
+        const token = jwt.sign({username}, process.env.JWT_TOKEN_SECRET, { expiresIn: '30m' })
+        mockRequest = {
+            headers: {
+                'authorization': 'Bearer ' + token
+            }
+        }
+        authenticateToken(mockRequest, mockResponse, nextFunction);
+        expect(nextFunction).toBeCalledTimes(1);
+    });
 })
